@@ -1,4 +1,4 @@
-import os
+# Copyright Lewis Anderson 2023
 import openai
 import random
 import re
