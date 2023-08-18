@@ -14,5 +14,5 @@ test: build
 
 
 run: build
-	@docker3 run -it --rm wikipull python3 scripts/wikipull.py
+	@docker run -it --rm wikipull python3 scripts/wikipull.py
 

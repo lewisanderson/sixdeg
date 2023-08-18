@@ -10,5 +10,7 @@ COPY requirements.txt .
 # Install the Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY scripts /app/scripts
+
 # By default, run python3 interpreter (you can change this to your specific script if needed)
-CMD ["python3 scripts/wikipull.py"]
+CMD ["python3"]

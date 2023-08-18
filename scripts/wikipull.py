@@ -149,4 +149,4 @@ def printSuccess(startUrl, endUrl, hopTrain):
 if __name__ == "__main__":
     for i in range(10):
         print(f"\n\n\n\n\nSTARTING round {i}")
-        main()
+        # main()
