@@ -1,0 +1,32 @@
+logs
+    # startUrl = "https://en.wikipedia.org/wiki/Nicolas_Buendia"
+    # endUrl = "https://en.wikipedia.org/wiki/Ashleworth_Ham"
+
+
+-- 3.5-turbo
+lied on 17
+lied on 1
+lied on 5
+
+-- changed instructions
+struggling to get it to not include extra stuff 
+failed instructions on 14
+failed instructions on 8
+
+-- switched to 4.0
+failed on 7 with extra newline
+succeeded on 10!
+failed on 19
+failed on 19, though it was reasonable
+
+-- increase maxlength to 100
+succeeded in 7!
+
+-- added head info
+success in 9!
+failed in 19
+success in 18
+
+-- back to 3.5
+it lies every time. i did 10 rounds, and it would lie within 1-5 hops
+
