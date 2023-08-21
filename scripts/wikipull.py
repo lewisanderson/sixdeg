@@ -4,6 +4,7 @@ import random
 import re
 import requests
 import time
+import traceback
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
@@ -63,11 +64,40 @@ def processPage(currentUrl, endUrl, endDescription):
     # modelToUse = "gpt-3.5-turbo"
     modelToUse = "gpt-4"
 
-    response = requests.get(currentUrl)
-    if response.status_code != 200:
-        print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
+    didGetLinks, links, reason = getLinksForPage(currentUrl)
+    if not didGetLinks:
+        print(reason)
         didFailGame = True
         return didFailGame, didMatchGoal, nextUrl
+
+    if endUrl in links:
+        didMatchGoal = True
+        nextUrl = endUrl
+        return didFailGame, didMatchGoal, nextUrl
+
+    urls = list(links.keys())
+    maxLength = 100
+    if len(urls) > maxLength:
+        urls = random.sample(urls, k=maxLength)
+
+    nextUrl = decideNextUrl(currentUrl, endUrl, endDescription, links, modelToUse, urls)
+    if not nextUrl in links:
+        nextUrl = nextUrlOutput.split()[0]
+        if not nextUrl in links:
+            print(f"Bad robot! it lied to us")
+            didFailGame = True
+            return didFailGame, didMatchGoal, nextUrl
+    return didFailGame, didMatchGoal, nextUrl
+
+
+def getLinksForPage(urlToFetch):
+    didSucceed = False
+    links = {}
+    reason = ""
+    response = requests.get(urlToFetch)
+    if response.status_code != 200:
+        reason = f"Failed to retrieve the webpage. Status code: {response.status_code}"
+        return didSucceed, links, reason
 
     soup = BeautifulSoup(response.content, 'html.parser')
     contentDiv = soup.find('div', id=HEADER_DIV_ID)
@@ -84,19 +114,14 @@ def processPage(currentUrl, endUrl, endDescription):
             theUrl.lower().endswith(".xvg")):
             continue
 
-        links[urljoin(currentUrl, theUrl)] = link.text
+        links[urljoin(urlToFetch, theUrl)] = link.text
         # print(linkDescription)
+    
+    didSucceed = True
+    return didSucceed, links, reason
 
-    if endUrl in links:
-        didMatchGoal = True
-        nextUrl = endUrl
-        return didFailGame, didMatchGoal, nextUrl
 
-    urls = list(links.keys())
-    maxLength = 100
-    if len(urls) > maxLength:
-        urls = random.sample(urls, k=maxLength)
-
+def decideNextUrl(currentUrl, endUrl, endDescription, links, modelToUse, urls):
     instructionText = f"""
 We are playing the "six degrees of kevin bacon" game on wikipedia. The goal is to go from a starting page to an ending page by clicking on links. We are currently at "{currentUrl}", and trying to get to "{endUrl}". I am going to show you a list of links and ask you which one to pick. I am going to give you extra information about the links in parentheses, but that extra information should not be printed back to me.
 
@@ -129,13 +154,7 @@ which of the following links is most likely to take us to our goal?
     nextUrlOutput = splits[-1]
     nextUrlOutput = nextUrlOutput.removesuffix("\n")
     nextUrl = nextUrlOutput.split()[-1]
-    if not nextUrl in links:
-        nextUrl = nextUrlOutput.split()[0]
-        if not nextUrl in links:
-            print(f"Bad robot! it lied to us")
-            didFailGame = True
-            return didFailGame, didMatchGoal, nextUrl
-    return didFailGame, didMatchGoal, nextUrl
+    return nextUrl
 
 
 def printSuccess(startUrl, endUrl, hopTrain):
@@ -146,6 +165,12 @@ def printSuccess(startUrl, endUrl, hopTrain):
 
 
 if __name__ == "__main__":
-    for i in range(1):
-        print(f"\n\n\n\n\nSTARTING round {i}")
-        main()
+    numRounds = 1
+    for i in range(numRounds):
+        try:
+            print(f"\n\n\n\n\nSTARTING round {i}")
+            main()
+        except Exception as e:
+            print(f"Failed round {i}. {e}\n{traceback.format_exc()}")
+            time.sleep(1)
+            continue
