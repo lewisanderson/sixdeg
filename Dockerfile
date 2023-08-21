@@ -11,6 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY scripts /app/scripts
+COPY testdata /app/testdata
 
 # By default, run python3 interpreter (you can change this to your specific script if needed)
 CMD ["python3"]

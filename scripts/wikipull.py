@@ -1,5 +1,6 @@
 # Copyright Lewis Anderson 2023
 import openai
+import os
 import random
 import re
 import requests
@@ -14,8 +15,7 @@ HEADER_DIV_ID = "mw-content-text"
 
 def main():
     openai.organization = "org-RfxFQjm7zizJjdQRALbJZaZB"
-    # WARNING: remove before publishing code on github
-    openai.api_key = "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"
+    openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     randomUrl = "https://en.wikipedia.org/wiki/Special:Random"
     startUrl = requests.get(randomUrl).url
