@@ -147,9 +147,7 @@ which of the following links is most likely to take us to our goal?
         ]
     )
     print(result)
-    # nextUrlOutput = result["choices"][0]["message"]["content"]
     splits = re.split("\\n", result["choices"][0]["message"]["content"])
-
     splits = [a for a in splits if len(a) > 5]
     nextUrlOutput = splits[-1]
     nextUrlOutput = nextUrlOutput.removesuffix("\n")
