@@ -16,7 +16,6 @@ def main():
     # WARNING: remove before publishing code on github
     openai.api_key = "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"
 
-
     randomUrl = "https://en.wikipedia.org/wiki/Special:Random"
     startUrl = requests.get(randomUrl).url
     endUrl = requests.get(randomUrl).url

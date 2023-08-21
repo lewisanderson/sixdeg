@@ -12,6 +12,23 @@ class WikiPullTest(unittest.TestCase):
     def tearDown(self):
         pass
 
+    @patch("wikipull.fetchInfoForEnd")
+    @patch("wikipull.processPage")
+    @patch("wikipull.time.sleep")
+    def test_main(self, sleepMock, processPageMock, fetchInfoForEndMock):
+        startUrl = "https://en.wikipedia.org/wiki/Nicolas_Buendia" 
+        endUrl = "https://en.wikipedia.org/wiki/Ashleworth_Ham"
+        fetchInfoForEndMock.return_value = "some stuff about nicolas"
+        processPageMock.return_value = (False, True, endUrl)
+        self.assertTrue(wikipull.main())
+
+        processPageMock.return_value = (True, True, endUrl)
+        self.assertFalse(wikipull.main())
+
+        processPageMock.return_value = (False, False, endUrl)
+        self.assertFalse(wikipull.main())
+        
+
     def test_printSuccess(self):
         startUrl = "https://en.wikipedia.org/wiki/Nicolas_Buendia" 
         endUrl = "https://en.wikipedia.org/wiki/Ashleworth_Ham"
