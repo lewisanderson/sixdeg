@@ -16,7 +16,7 @@ class GWikiTest(unittest.TestCase):
     @patch("gwiki.wikipull.fetchInfoForPage")
     @patch("gwiki.wikipull.processPage")
     @patch("gwiki.wikipull.time.sleep")
-    @patch('gwiki.openai.ChatCompletion.create')
+    @patch("gwiki.openai.ChatCompletion.create")
     def test_main(self, createMock, sleepMock, processPageMock, fetchInfoForPageMock):
         startUrl = "https://en.wikipedia.org/wiki/Nicolas_Buendia" 
         endUrl = "https://en.wikipedia.org/wiki/Ashleworth_Ham"
@@ -69,6 +69,9 @@ class GWikiTest(unittest.TestCase):
                 "total_tokens": 2398
             }
         }
+        self.assertTrue(gwiki.main())
+
+        fetchInfoForPageMock.return_value = "some stuff about nicolas"*50
         self.assertTrue(gwiki.main())
     
     @patch("gwiki.wikipull.fetchLinksForPage")

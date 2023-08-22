@@ -43,6 +43,11 @@ def main():
 
 def runConversation(messages, maxHops, modelToUse, wikiFetcher):
     for i in range(maxHops):
+        truncateLength = 400
+        if len(messages) > 5:
+            if len(messages[-3]["content"]) > truncateLength:
+                print(f"fyi truncating older message")
+                messages[-3]["content"] = messages[-3]["content"][:truncateLength] + "<truncated>"
         response = openai.ChatCompletion.create(
             model=modelToUse,
             messages=messages,
