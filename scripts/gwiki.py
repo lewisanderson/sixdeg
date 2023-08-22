@@ -146,7 +146,7 @@ class WikiFetcher:
 
     def fetchLinksForPage(self, inputUrl: str) -> (bool, list, str):
         if inputUrl not in self.previousLinks and inputUrl != self.startUrl:
-            errorMessage = f"ERROR: fetching links for page {inputUrl} not in {self.previousLinks}, {self.startUrl}"
+            errorMessage = f"ERROR: fetching links for page {inputUrl} that isnt the start page nor the page that we just visited"
             print(errorMessage)
             return False, [], errorMessage
         
