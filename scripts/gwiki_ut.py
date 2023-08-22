@@ -70,7 +70,22 @@ class GWikiTest(unittest.TestCase):
             }
         }
         self.assertTrue(gwiki.main())
-        
+    
+    @patch("gwiki.wikipull.fetchLinksForPage")
+    def test_fetchLinksForPage(self, fetchLinksForPageMock):
+        startUrl = "https://en.wikipedia.org/wiki/Nicolas_Buendia"
+        fetchLinksForPageMock.return_value = (True, {"https://en.wikipedia.org/wiki/2020": "2020", "https://en.wikipedia.org/wiki/2021": "2021"}, None)
+        fetcher = gwiki.WikiFetcher()
+        fetcher.startUrl = startUrl
+        didGetLinks, links, reason = fetcher.fetchLinksForPage(startUrl)
+        self.assertTrue(didGetLinks)
+        self.assertEqual(len(links), 2)
+
+        fullLinks = {f"https://en.wikipedia.org/wiki/{idx}": idx for idx in range(150)}
+        fetchLinksForPageMock.return_value = (True, fullLinks, None)
+        didGetLinks, links, reason = fetcher.fetchLinksForPage(startUrl)
+        self.assertTrue(didGetLinks)
+        self.assertLessEqual(len(links), 101)
 
 
 

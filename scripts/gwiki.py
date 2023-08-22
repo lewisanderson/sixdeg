@@ -149,7 +149,8 @@ class WikiFetcher:
         if didSucceed:
             maxLength = 50
             if len(links) > maxLength:
-                links = random.sample(links, k=maxLength)
+                sampledKeys = random.sample(list(links.keys()), k=maxLength)
+                links = {key: links[key] for key in sampledKeys}
             
             self.previousLinks = set(links.keys())
         return didSucceed, links, reason

@@ -111,7 +111,8 @@ def fetchLinksForPage(urlToFetch):
         if (link.text in["edit", "link"] or 
             theUrl.lower().endswith(".jpg") or 
             theUrl.lower().endswith(".png") or 
-            theUrl.lower().endswith(".xvg")):
+            theUrl.lower().endswith(".xvg") or 
+            theUrl.lower().endswith(".svg")):
             continue
 
         links[urljoin(urlToFetch, theUrl)] = link.text
