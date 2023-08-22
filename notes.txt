@@ -30,3 +30,13 @@ success in 18
 -- back to 3.5
 it lies every time. i did 10 rounds, and it would lie within 1-5 hops
 
+
+-- have gpt run the game! using 4.0, partially for token limit
+did pretty well, but gave up after 16 rounds
+succeeded in 15!
+gave up after 14. got stuck, unable to pick a valid link
+gave up after 7. stuck again.
+ran out of hops after 20. got stuck again, but this time was smart enough to start over.
+failed at 19. same thing.
+failed and lied at 14
+(each run seems to cost ~$1)
