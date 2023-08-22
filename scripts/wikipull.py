@@ -21,7 +21,7 @@ def main():
     startUrl = requests.get(randomUrl).url
     endUrl = requests.get(randomUrl).url
 
-    endDescription = fetchInfoForEnd(endUrl)
+    endDescription = fetchInfoForPage(endUrl)
 
     currentUrl = startUrl
     hopTrain = [startUrl]
@@ -47,7 +47,7 @@ def main():
     return True
 
 
-def fetchInfoForEnd(endUrl):
+def fetchInfoForPage(endUrl):
     outputText = ""
     response = requests.get(endUrl)
     soup = BeautifulSoup(response.content, 'html.parser')
@@ -64,7 +64,7 @@ def processPage(currentUrl, endUrl, endDescription):
     # modelToUse = "gpt-3.5-turbo"
     modelToUse = "gpt-4"
 
-    didGetLinks, links, reason = getLinksForPage(currentUrl)
+    didGetLinks, links, reason = fetchLinksForPage(currentUrl)
     if not didGetLinks:
         print(reason)
         didFailGame = True
@@ -90,7 +90,7 @@ def processPage(currentUrl, endUrl, endDescription):
     return didFailGame, didMatchGoal, nextUrl
 
 
-def getLinksForPage(urlToFetch):
+def fetchLinksForPage(urlToFetch):
     didSucceed = False
     links = {}
     reason = ""

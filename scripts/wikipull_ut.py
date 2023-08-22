@@ -12,13 +12,13 @@ class WikiPullTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @patch("wikipull.fetchInfoForEnd")
+    @patch("wikipull.fetchInfoForPage")
     @patch("wikipull.processPage")
     @patch("wikipull.time.sleep")
-    def test_main(self, sleepMock, processPageMock, fetchInfoForEndMock):
+    def test_main(self, sleepMock, processPageMock, fetchInfoForPageMock):
         startUrl = "https://en.wikipedia.org/wiki/Nicolas_Buendia" 
         endUrl = "https://en.wikipedia.org/wiki/Ashleworth_Ham"
-        fetchInfoForEndMock.return_value = "some stuff about nicolas"
+        fetchInfoForPageMock.return_value = "some stuff about nicolas"
         processPageMock.return_value = (False, True, endUrl)
         self.assertTrue(wikipull.main())
 
@@ -36,7 +36,7 @@ class WikiPullTest(unittest.TestCase):
         wikipull.printSuccess(startUrl, endUrl, hopTrain)
 
     @patch("wikipull.requests.get")
-    def test_fetchInfoForEnd(self, getMock):
+    def test_fetchInfoForPage(self, getMock):
         endUrl = "https://en.wikipedia.org/wiki/2020"
 
         with open("testdata/wiki2020.html", "r") as f:
@@ -46,7 +46,7 @@ class WikiPullTest(unittest.TestCase):
             status_code = 200,
             content = wiki2020Html
         )
-        endDescription = wikipull.fetchInfoForEnd(endUrl)
+        endDescription = wikipull.fetchInfoForPage(endUrl)
         self.assertTrue(len(endDescription) > 0)
 
     @patch('wikipull.openai.ChatCompletion.create')
